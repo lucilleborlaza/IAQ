@@ -102,6 +102,7 @@ else:
 
 # Merge indoor and outdoor BC DataFrames
 all_BC = pd.concat([indoor_BC, outdoor_BC])
+#all_BrC = pd.concat([indoor_BrC, outdoor_BrC])
 
 # Drop rows with all NaN values
 all_BC.dropna(how='all', inplace=True)
@@ -124,8 +125,6 @@ columns_to_process = all_BC.columns.difference(['DateTime', 'Site', 'Dataset'])
 # Apply the function to selected columns one by one
 for column_name in columns_to_process:
     replace_outliers_with_nan_iqr(all_BC[column_name])
-
-all_BC
 
 # Melt the DataFrame while keeping 'Site' and 'Dataset' columns
 melted_BC = pd.melt(all_BC, id_vars=['DateTime', 'Site', 'Dataset'], var_name='Variable', value_name='Value')
@@ -178,6 +177,77 @@ handles, labels = g.get_legend_handles_labels()
 g.legend(handles[:2], labels[:2], title='Set')
 
 plt.tight_layout()
+plt.show()
+
+# Assuming you have the indoor_BC and outdoor_BC dataframes
+dataframes = [indoor_BC, outdoor_BC]
+
+# List to store the resulting dataframes
+daily_mean_dfs = []
+
+for df in dataframes:
+    # Reset the index and drop 'Dataset' column
+    df.drop(columns=['Dataset'], inplace=True)
+    df.reset_index(inplace=True)
+
+    # Melt the dataframe while keeping 'DateTime' and 'Site' columns
+    melted_df = pd.melt(df, id_vars=['DateTime', 'Site'], var_name='Variable', value_name='Value')
+    melted_df.set_index('DateTime', inplace=True)
+
+    # Group the melted dataframe by 'Site' and resample to daily frequency, calculating the mean
+    daily_mean_df = melted_df.groupby('Site').resample('D').mean()
+
+    # Append the resulting dataframe to the list
+    daily_mean_dfs.append(daily_mean_df)
+
+# Unpack the list into separate dataframes for indoor and outdoor
+daily_mean_indoor, daily_mean_outdoor = daily_mean_dfs
+
+# Print the resulting dataframes
+print("Daily Mean Indoor:")
+print(daily_mean_indoor)
+
+print("Daily Mean Outdoor:")
+print(daily_mean_outdoor)
+
+# Assuming you have daily_mean_outdoor and daily_mean_indoor dataframes
+
+# Create an empty dictionary to store the correlation results by Site
+correlation_results = {}
+
+# Get the unique Site values
+unique_sites = daily_mean_outdoor.index.get_level_values('Site').unique()
+
+# Loop through each unique Site
+for site in unique_sites:
+    # Extract the data for the current Site
+    outdoor_data = daily_mean_outdoor.loc[daily_mean_outdoor.index.get_level_values('Site') == site]
+    indoor_data = daily_mean_indoor.loc[daily_mean_indoor.index.get_level_values('Site') == site]
+
+    # Calculate the Spearman correlation between outdoor and indoor data for the current Site
+    spearman_corr = outdoor_data.corrwith(indoor_data, method='spearman')
+
+    # Store the correlation results in the dictionary
+    correlation_results[site] = spearman_corr
+
+# Create a DataFrame from the correlation results
+correlation_df = pd.DataFrame(correlation_results)
+
+# Print the resulting correlation DataFrame
+print(correlation_df)
+
+# Assuming you have the correlation_df DataFrame
+
+# Create a heatmap
+plt.figure(figsize=(10, 3), dpi=300)  # Adjust the figure size as needed
+sns.heatmap(correlation_df, annot=True, cmap='coolwarm', linewidths=0.5, vmin=0, vmax=1)
+
+# Set the plot title and labels
+plt.title('Spearman Correlation Heatmap')
+plt.xlabel('')
+plt.ylabel('r${_s}$', fontweight="bold")
+
+# Show the heatmap
 plt.show()
 
 
