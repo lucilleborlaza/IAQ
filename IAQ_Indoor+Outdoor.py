@@ -135,18 +135,47 @@ melted_BC['Value'] = melted_BC['Value'].where(melted_BC['Value'] > 0, other=floa
 plot = sns.catplot(
     data=melted_BC, x="Site", y="Value", hue="Dataset",
     kind="violin", bw_adjust=.5, cut=0, split=True, 
-    inner="box",
+    inner="quartiles",
     height=5,  # Set the figure height
     aspect=2,  # Set the aspect ratio to control the width
 )
+
+
+# Create the figure and set the figure size
+plt.figure(figsize=(10, 4))
+
+# Define the color palette for the legend and violin plots
+palette = {'Indoor': 'blue', 'Outdoor': 'orange'}
+
+# Create the violin plots and specify the hue and palette
+g=sns.violinplot(data=melted_BC, 
+               x='Site', 
+               y='Value', 
+               hue='Dataset', 
+               split=True, 
+               inner=None, 
+               palette=palette,
+               )
+
+# Create the box plots without legend
+sns.boxplot(data=melted_BC, 
+            x='Site', 
+            y='Value', 
+            hue='Dataset', 
+            color='white', 
+            width=0.3, 
+            boxprops={'zorder': 2}, 
+            showfliers=False,
+            )
 
 # Set the x-label and y-label
 plt.xlabel("")
 plt.ylabel("BC concentration (μg/m${^3}$)")
 
-# Save the plot to an image file with the desired DPI
-plot.savefig("catplot.png", dpi=300)
+handles, labels = g.get_legend_handles_labels()
+g.legend(handles[:2], labels[:2], title='Set')
 
-# Show the plot
+plt.tight_layout()
 plt.show()
+
 
