@@ -125,6 +125,8 @@ columns_to_process = all_BC.columns.difference(['DateTime', 'Site', 'Dataset'])
 for column_name in columns_to_process:
     replace_outliers_with_nan_iqr(all_BC[column_name])
 
+all_BC
+
 # Melt the DataFrame while keeping 'Site' and 'Dataset' columns
 melted_BC = pd.melt(all_BC, id_vars=['DateTime', 'Site', 'Dataset'], var_name='Variable', value_name='Value')
 
@@ -142,7 +144,7 @@ plot = sns.catplot(
 
 
 # Create the figure and set the figure size
-plt.figure(figsize=(10, 4))
+plt.figure(figsize=(12, 4))
 
 # Define the color palette for the legend and violin plots
 palette = {'Indoor': 'blue', 'Outdoor': 'orange'}
