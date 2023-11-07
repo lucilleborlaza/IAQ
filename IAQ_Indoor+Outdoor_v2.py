@@ -69,7 +69,7 @@ def process_iaq_file(file_path, environment):
 
 # Define file paths for indoor and outdoor data
 indoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\IAQ_Indoor.xlsx'
-outdoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\\IAQ_Outdoor.xlsx'  # Replace with the outdoor file path
+outdoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\IAQ_Outdoor.xlsx'  # Replace with the outdoor file path
 
 # Process indoor and outdoor data
 indoor_BC, indoor_BrC = process_iaq_file(indoor_file_path, 'Indoor')

@@ -69,7 +69,7 @@ def process_iaq_file(file_path, environment):
 
 # Define file paths for indoor and outdoor data
 indoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\IAQ_Indoor.xlsx'
-outdoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\\IAQ_Outdoor.xlsx'  # Replace with the outdoor file path
+outdoor_file_path = r'C:\Users\LB945465\OneDrive - University at Albany - SUNY\State University of New York\Extra\Extra work\IAQ\IAQ_Outdoor.xlsx'  # Replace with the outdoor file path
 
 # Process indoor and outdoor data
 indoor_BC, indoor_BrC = process_iaq_file(indoor_file_path, 'Indoor')
@@ -243,7 +243,7 @@ plt.figure(figsize=(10, 3), dpi=300)  # Adjust the figure size as needed
 sns.heatmap(correlation_df, annot=True, cmap='coolwarm', linewidths=0.5, vmin=0, vmax=1)
 
 # Set the plot title and labels
-plt.title('Spearman Correlation Heatmap')
+plt.title('Spearman Correlation Heatmap', fontweight="bold")
 plt.xlabel('')
 plt.ylabel('r${_s}$', fontweight="bold")
 
