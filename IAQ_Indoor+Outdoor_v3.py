@@ -127,7 +127,7 @@ melted_BC = pd.melt(all_data, id_vars=['Datetime', 'Site', 'Dataset'], var_name=
 melted_BC['Value'] = melted_BC['Value'].where(melted_BC['Value'] > 0, other=float('nan'))
 
 # Create the figure and set the figure size
-plt.figure(figsize=(12, 4))
+plt.figure(figsize=(15, 4))
 
 # Define the color palette for the legend and violin plots
 palette = {'Indoor': 'blue', 'Outdoor': 'orange'}
